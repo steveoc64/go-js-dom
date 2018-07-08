@@ -118,13 +118,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gowasm/gopherwasm/js"
+	"github.com/gopherjs/gopherwasm/js"
 )
 
 // toString returns the string representation of o. If o is nil or
 // undefined, the empty string will be returned instead.
 func toString(o js.Value) string {
-	if o == js.Null || o == js.Undefined {
+	if o == js.Null() || o == js.Undefined() {
 		return ""
 	}
 	return o.String()
@@ -147,7 +147,7 @@ func callRecover(o js.Value, fn string, args ...interface{}) (err error) {
 }
 
 func elementConstructor(o js.Value) js.Value {
-	if n := o.Get("node"); n != js.Undefined {
+	if n := o.Get("node"); n != js.Undefined() {
 		// Support elements wrapped in Polymer's DOM APIs.
 		return n.Get("constructor")
 	}
@@ -163,7 +163,7 @@ func arrayToObjects(o js.Value) []js.Value {
 }
 
 func nodeListToObjects(o js.Value) []js.Value {
-	if o.Get("constructor") == js.Global.Get("Array") {
+	if o.Get("constructor") == js.Global().Get("Array") {
 		// Support Polymer's DOM APIs, which uses Arrays instead of
 		// NodeLists
 		return arrayToObjects(o)
@@ -222,7 +222,7 @@ func WrapHTMLElement(o js.Value) HTMLElement {
 
 func wrapDocument(o js.Value) Document {
 	switch elementConstructor(o) {
-	case js.Global.Get("HTMLDocument"):
+	case js.Global().Get("HTMLDocument"):
 		return &htmlDocument{&document{&BasicNode{o}}}
 	default:
 		return &document{&BasicNode{o}}
@@ -238,12 +238,12 @@ func wrapDocumentFragment(o js.Value) DocumentFragment {
 }
 
 func wrapNode(o js.Value) Node {
-	if o == js.Null || o == js.Undefined {
+	if o == js.Null() || o == js.Undefined() {
 		return nil
 	}
 	switch elementConstructor(o) {
 	// TODO all the non-element cases
-	case js.Global.Get("Text"):
+	case js.Global().Get("Text"):
 		return &Text{&BasicNode{o}}
 	default:
 		return wrapElement(o)
@@ -251,7 +251,7 @@ func wrapNode(o js.Value) Node {
 }
 
 func wrapElement(o js.Value) Element {
-	if o == js.Null || o == js.Undefined {
+	if o == js.Null() || o == js.Undefined() {
 		return nil
 	}
 	switch elementConstructor(o) {
@@ -262,149 +262,149 @@ func wrapElement(o js.Value) Element {
 }
 
 func wrapHTMLElement(o js.Value) HTMLElement {
-	if o == js.Null || o == js.Undefined {
+	if o == js.Null() || o == js.Undefined() {
 		return nil
 	}
 	el := &BasicHTMLElement{&BasicElement{&BasicNode{o}}}
 	c := elementConstructor(o)
 	switch c {
-	case js.Global.Get("HTMLAnchorElement"):
+	case js.Global().Get("HTMLAnchorElement"):
 		return &HTMLAnchorElement{BasicHTMLElement: el, URLUtils: &URLUtils{Value: o}}
-	case js.Global.Get("HTMLAppletElement"):
+	case js.Global().Get("HTMLAppletElement"):
 		return &HTMLAppletElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLAreaElement"):
+	case js.Global().Get("HTMLAreaElement"):
 		return &HTMLAreaElement{BasicHTMLElement: el, URLUtils: &URLUtils{Value: o}}
-	case js.Global.Get("HTMLAudioElement"):
+	case js.Global().Get("HTMLAudioElement"):
 		return &HTMLAudioElement{HTMLMediaElement: &HTMLMediaElement{BasicHTMLElement: el}}
-	case js.Global.Get("HTMLBaseElement"):
+	case js.Global().Get("HTMLBaseElement"):
 		return &HTMLBaseElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLBodyElement"):
+	case js.Global().Get("HTMLBodyElement"):
 		return &HTMLBodyElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLBRElement"):
+	case js.Global().Get("HTMLBRElement"):
 		return &HTMLBRElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLButtonElement"):
+	case js.Global().Get("HTMLButtonElement"):
 		return &HTMLButtonElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLCanvasElement"):
+	case js.Global().Get("HTMLCanvasElement"):
 		return &HTMLCanvasElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLDataElement"):
+	case js.Global().Get("HTMLDataElement"):
 		return &HTMLDataElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLDataListElement"):
+	case js.Global().Get("HTMLDataListElement"):
 		return &HTMLDataListElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLDirectoryElement"):
+	case js.Global().Get("HTMLDirectoryElement"):
 		return &HTMLDirectoryElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLDivElement"):
+	case js.Global().Get("HTMLDivElement"):
 		return &HTMLDivElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLDListElement"):
+	case js.Global().Get("HTMLDListElement"):
 		return &HTMLDListElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLEmbedElement"):
+	case js.Global().Get("HTMLEmbedElement"):
 		return &HTMLEmbedElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLFieldSetElement"):
+	case js.Global().Get("HTMLFieldSetElement"):
 		return &HTMLFieldSetElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLFontElement"):
+	case js.Global().Get("HTMLFontElement"):
 		return &HTMLFontElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLFormElement"):
+	case js.Global().Get("HTMLFormElement"):
 		return &HTMLFormElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLFrameElement"):
+	case js.Global().Get("HTMLFrameElement"):
 		return &HTMLFrameElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLFrameSetElement"):
+	case js.Global().Get("HTMLFrameSetElement"):
 		return &HTMLFrameSetElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLHeadElement"):
+	case js.Global().Get("HTMLHeadElement"):
 		return &HTMLHeadElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLHeadingElement"):
+	case js.Global().Get("HTMLHeadingElement"):
 		return &HTMLHeadingElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLHtmlElement"):
+	case js.Global().Get("HTMLHtmlElement"):
 		return &HTMLHtmlElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLHRElement"):
+	case js.Global().Get("HTMLHRElement"):
 		return &HTMLHRElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLIFrameElement"):
+	case js.Global().Get("HTMLIFrameElement"):
 		return &HTMLIFrameElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLImageElement"):
+	case js.Global().Get("HTMLImageElement"):
 		return &HTMLImageElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLInputElement"):
+	case js.Global().Get("HTMLInputElement"):
 		return &HTMLInputElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLKeygenElement"):
+	case js.Global().Get("HTMLKeygenElement"):
 		return &HTMLKeygenElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLLabelElement"):
+	case js.Global().Get("HTMLLabelElement"):
 		return &HTMLLabelElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLLegendElement"):
+	case js.Global().Get("HTMLLegendElement"):
 		return &HTMLLegendElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLLIElement"):
+	case js.Global().Get("HTMLLIElement"):
 		return &HTMLLIElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLLinkElement"):
+	case js.Global().Get("HTMLLinkElement"):
 		return &HTMLLinkElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLMapElement"):
+	case js.Global().Get("HTMLMapElement"):
 		return &HTMLMapElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLMediaElement"):
+	case js.Global().Get("HTMLMediaElement"):
 		return &HTMLMediaElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLMenuElement"):
+	case js.Global().Get("HTMLMenuElement"):
 		return &HTMLMenuElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLMetaElement"):
+	case js.Global().Get("HTMLMetaElement"):
 		return &HTMLMetaElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLMeterElement"):
+	case js.Global().Get("HTMLMeterElement"):
 		return &HTMLMeterElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLModElement"):
+	case js.Global().Get("HTMLModElement"):
 		return &HTMLModElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLObjectElement"):
+	case js.Global().Get("HTMLObjectElement"):
 		return &HTMLObjectElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLOListElement"):
+	case js.Global().Get("HTMLOListElement"):
 		return &HTMLOListElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLOptGroupElement"):
+	case js.Global().Get("HTMLOptGroupElement"):
 		return &HTMLOptGroupElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLOptionElement"):
+	case js.Global().Get("HTMLOptionElement"):
 		return &HTMLOptionElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLOutputElement"):
+	case js.Global().Get("HTMLOutputElement"):
 		return &HTMLOutputElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLParagraphElement"):
+	case js.Global().Get("HTMLParagraphElement"):
 		return &HTMLParagraphElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLParamElement"):
+	case js.Global().Get("HTMLParamElement"):
 		return &HTMLParamElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLPreElement"):
+	case js.Global().Get("HTMLPreElement"):
 		return &HTMLPreElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLProgressElement"):
+	case js.Global().Get("HTMLProgressElement"):
 		return &HTMLProgressElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLQuoteElement"):
+	case js.Global().Get("HTMLQuoteElement"):
 		return &HTMLQuoteElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLScriptElement"):
+	case js.Global().Get("HTMLScriptElement"):
 		return &HTMLScriptElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLSelectElement"):
+	case js.Global().Get("HTMLSelectElement"):
 		return &HTMLSelectElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLSourceElement"):
+	case js.Global().Get("HTMLSourceElement"):
 		return &HTMLSourceElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLSpanElement"):
+	case js.Global().Get("HTMLSpanElement"):
 		return &HTMLSpanElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLStyleElement"):
+	case js.Global().Get("HTMLStyleElement"):
 		return &HTMLStyleElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableElement"):
+	case js.Global().Get("HTMLTableElement"):
 		return &HTMLTableElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableCaptionElement"):
+	case js.Global().Get("HTMLTableCaptionElement"):
 		return &HTMLTableCaptionElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableCellElement"):
+	case js.Global().Get("HTMLTableCellElement"):
 		return &HTMLTableCellElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableDataCellElement"):
+	case js.Global().Get("HTMLTableDataCellElement"):
 		return &HTMLTableDataCellElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableHeaderCellElement"):
+	case js.Global().Get("HTMLTableHeaderCellElement"):
 		return &HTMLTableHeaderCellElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableColElement"):
+	case js.Global().Get("HTMLTableColElement"):
 		return &HTMLTableColElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableRowElement"):
+	case js.Global().Get("HTMLTableRowElement"):
 		return &HTMLTableRowElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTableSectionElement"):
+	case js.Global().Get("HTMLTableSectionElement"):
 		return &HTMLTableSectionElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTextAreaElement"):
+	case js.Global().Get("HTMLTextAreaElement"):
 		return &HTMLTextAreaElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTimeElement"):
+	case js.Global().Get("HTMLTimeElement"):
 		return &HTMLTimeElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTitleElement"):
+	case js.Global().Get("HTMLTitleElement"):
 		return &HTMLTitleElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLTrackElement"):
+	case js.Global().Get("HTMLTrackElement"):
 		return &HTMLTrackElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLUListElement"):
+	case js.Global().Get("HTMLUListElement"):
 		return &HTMLUListElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLUnknownElement"):
+	case js.Global().Get("HTMLUnknownElement"):
 		return &HTMLUnknownElement{BasicHTMLElement: el}
-	case js.Global.Get("HTMLVideoElement"):
+	case js.Global().Get("HTMLVideoElement"):
 		return &HTMLVideoElement{HTMLMediaElement: &HTMLMediaElement{BasicHTMLElement: el}}
-	case js.Global.Get("HTMLElement"):
+	case js.Global().Get("HTMLElement"):
 		return el
 	default:
 		return el
@@ -438,7 +438,7 @@ func getOptions(o js.Value, attr string) []*HTMLOptionElement {
 }
 
 func GetWindow() Window {
-	return &window{js.Global}
+	return &window{js.Global()}
 }
 
 type TokenList struct {
@@ -474,7 +474,7 @@ func (tl *TokenList) String() string {
 	if tl.sa != "" {
 		return tl.o.Get(tl.sa).String()
 	}
-	if tl.dtl.Get("constructor") == js.Global.Get("DOMSettableTokenList") {
+	if tl.dtl.Get("constructor") == js.Global().Get("DOMSettableTokenList") {
 		return tl.dtl.Get("value").String()
 	}
 	// We could manually construct the string, but I am not aware of
@@ -499,7 +499,7 @@ func (tl *TokenList) SetString(s string) {
 		tl.o.Set(tl.sa, s)
 		return
 	}
-	if tl.dtl.Get("constructor") == js.Global.Get("DOMSettableTokenList") {
+	if tl.dtl.Get("constructor") == js.Global().Get("DOMSettableTokenList") {
 		tl.dtl.Set("value", s)
 		return
 	}
@@ -569,7 +569,7 @@ type HTMLDocument interface {
 	Forms() []*HTMLFormElement
 	Head() *HTMLHeadElement
 	Images() []*HTMLImageElement
-	LastModified() time.Time
+	LastModified() string
 	Links() []HTMLElement
 	Location() *Location
 	Plugins() []*HTMLEmbedElement
@@ -676,8 +676,8 @@ func (d *htmlDocument) Images() []*HTMLImageElement {
 	return els
 }
 
-func (d *htmlDocument) LastModified() time.Time {
-	return d.Get("lastModified").Interface().(time.Time)
+func (d *htmlDocument) LastModified() string {
+	return d.Get("lastModified").String()
 }
 
 func (d *htmlDocument) Links() []HTMLElement {
@@ -1569,10 +1569,22 @@ func (e *BasicHTMLElement) AccessKey() string {
 	return e.Get("accessKey").String()
 }
 
+func jsKeys(o js.Value) []string {
+	if o == js.Null() || o == js.Undefined() {
+		return nil
+	}
+	a := js.Global().Get("Object").Call("keys", o)
+	s := make([]string, a.Length())
+	for i := 0; i < a.Length(); i++ {
+		s[i] = a.Index(i).String()
+	}
+	return s
+}
+
 func (e *BasicHTMLElement) Dataset() map[string]string {
 	o := e.Get("dataset")
 	data := map[string]string{}
-	keys := js.Keys(o)
+	keys := jsKeys(o)
 	for _, key := range keys {
 		data[key] = o.Get(key).String()
 	}
@@ -2100,7 +2112,9 @@ func (ctx *CanvasRenderingContext2D) MeasureText(text string) *TextMetrics {
 
 func (ctx *CanvasRenderingContext2D) GetLineDash() []float64 {
 	var dashes []float64
-	for _, dash := range ctx.Call("getLineDash").Interface().([]interface{}) {
+	lineDashes := js.GetInternalObject(ctx.Call("getLineDash")).([]interface{}) // is an array of float
+
+	for _, dash := range lineDashes {
 		dashes = append(dashes, dash.(float64))
 	}
 	return dashes

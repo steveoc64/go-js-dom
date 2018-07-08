@@ -3,7 +3,7 @@ package dom
 import (
 	"time"
 
-	"github.com/gowasm/gopherwasm/js"
+	"github.com/gopherjs/gopherwasm/js"
 )
 
 func WrapEvent(o js.Value) Event {
@@ -11,101 +11,101 @@ func WrapEvent(o js.Value) Event {
 }
 
 func wrapEvent(o js.Value) Event {
-	if o == js.Null || o == js.Undefined {
+	if o == js.Null() || o == js.Undefined() {
 		return nil
 	}
 	ev := &BasicEvent{o}
 	c := o.Get("constructor")
 	switch c {
-	case js.Global.Get("AnimationEvent"):
+	case js.Global().Get("AnimationEvent"):
 		return &AnimationEvent{ev}
-	case js.Global.Get("AudioProcessingEvent"):
+	case js.Global().Get("AudioProcessingEvent"):
 		return &AudioProcessingEvent{ev}
-	case js.Global.Get("BeforeInputEvent"):
+	case js.Global().Get("BeforeInputEvent"):
 		return &BeforeInputEvent{ev}
-	case js.Global.Get("BeforeUnloadEvent"):
+	case js.Global().Get("BeforeUnloadEvent"):
 		return &BeforeUnloadEvent{ev}
-	case js.Global.Get("BlobEvent"):
+	case js.Global().Get("BlobEvent"):
 		return &BlobEvent{ev}
-	case js.Global.Get("ClipboardEvent"):
+	case js.Global().Get("ClipboardEvent"):
 		return &ClipboardEvent{ev}
-	case js.Global.Get("CloseEvent"):
+	case js.Global().Get("CloseEvent"):
 		return &CloseEvent{BasicEvent: ev}
-	case js.Global.Get("CompositionEvent"):
+	case js.Global().Get("CompositionEvent"):
 		return &CompositionEvent{ev}
-	case js.Global.Get("CSSFontFaceLoadEvent"):
+	case js.Global().Get("CSSFontFaceLoadEvent"):
 		return &CSSFontFaceLoadEvent{ev}
-	case js.Global.Get("CustomEvent"):
+	case js.Global().Get("CustomEvent"):
 		return &CustomEvent{ev}
-	case js.Global.Get("DeviceLightEvent"):
+	case js.Global().Get("DeviceLightEvent"):
 		return &DeviceLightEvent{ev}
-	case js.Global.Get("DeviceMotionEvent"):
+	case js.Global().Get("DeviceMotionEvent"):
 		return &DeviceMotionEvent{ev}
-	case js.Global.Get("DeviceOrientationEvent"):
+	case js.Global().Get("DeviceOrientationEvent"):
 		return &DeviceOrientationEvent{ev}
-	case js.Global.Get("DeviceProximityEvent"):
+	case js.Global().Get("DeviceProximityEvent"):
 		return &DeviceProximityEvent{ev}
-	case js.Global.Get("DOMTransactionEvent"):
+	case js.Global().Get("DOMTransactionEvent"):
 		return &DOMTransactionEvent{ev}
-	case js.Global.Get("DragEvent"):
+	case js.Global().Get("DragEvent"):
 		return &DragEvent{ev}
-	case js.Global.Get("EditingBeforeInputEvent"):
+	case js.Global().Get("EditingBeforeInputEvent"):
 		return &EditingBeforeInputEvent{ev}
-	case js.Global.Get("ErrorEvent"):
+	case js.Global().Get("ErrorEvent"):
 		return &ErrorEvent{ev}
-	case js.Global.Get("FocusEvent"):
+	case js.Global().Get("FocusEvent"):
 		return &FocusEvent{ev}
-	case js.Global.Get("GamepadEvent"):
+	case js.Global().Get("GamepadEvent"):
 		return &GamepadEvent{ev}
-	case js.Global.Get("HashChangeEvent"):
+	case js.Global().Get("HashChangeEvent"):
 		return &HashChangeEvent{ev}
-	case js.Global.Get("IDBVersionChangeEvent"):
+	case js.Global().Get("IDBVersionChangeEvent"):
 		return &IDBVersionChangeEvent{ev}
-	case js.Global.Get("KeyboardEvent"):
+	case js.Global().Get("KeyboardEvent"):
 		return &KeyboardEvent{BasicEvent: ev}
-	case js.Global.Get("MediaStreamEvent"):
+	case js.Global().Get("MediaStreamEvent"):
 		return &MediaStreamEvent{ev}
-	case js.Global.Get("MessageEvent"):
+	case js.Global().Get("MessageEvent"):
 		return &MessageEvent{BasicEvent: ev}
-	case js.Global.Get("MouseEvent"):
+	case js.Global().Get("MouseEvent"):
 		return &MouseEvent{UIEvent: &UIEvent{ev}}
-	case js.Global.Get("MutationEvent"):
+	case js.Global().Get("MutationEvent"):
 		return &MutationEvent{ev}
-	case js.Global.Get("OfflineAudioCompletionEvent"):
+	case js.Global().Get("OfflineAudioCompletionEvent"):
 		return &OfflineAudioCompletionEvent{ev}
-	case js.Global.Get("PageTransitionEvent"):
+	case js.Global().Get("PageTransitionEvent"):
 		return &PageTransitionEvent{ev}
-	case js.Global.Get("PointerEvent"):
+	case js.Global().Get("PointerEvent"):
 		return &PointerEvent{ev}
-	case js.Global.Get("PopStateEvent"):
+	case js.Global().Get("PopStateEvent"):
 		return &PopStateEvent{ev}
-	case js.Global.Get("ProgressEvent"):
+	case js.Global().Get("ProgressEvent"):
 		return &ProgressEvent{ev}
-	case js.Global.Get("RelatedEvent"):
+	case js.Global().Get("RelatedEvent"):
 		return &RelatedEvent{ev}
-	case js.Global.Get("RTCPeerConnectionIceEvent"):
+	case js.Global().Get("RTCPeerConnectionIceEvent"):
 		return &RTCPeerConnectionIceEvent{ev}
-	case js.Global.Get("SensorEvent"):
+	case js.Global().Get("SensorEvent"):
 		return &SensorEvent{ev}
-	case js.Global.Get("StorageEvent"):
+	case js.Global().Get("StorageEvent"):
 		return &StorageEvent{ev}
-	case js.Global.Get("SVGEvent"):
+	case js.Global().Get("SVGEvent"):
 		return &SVGEvent{ev}
-	case js.Global.Get("SVGZoomEvent"):
+	case js.Global().Get("SVGZoomEvent"):
 		return &SVGZoomEvent{ev}
-	case js.Global.Get("TimeEvent"):
+	case js.Global().Get("TimeEvent"):
 		return &TimeEvent{ev}
-	case js.Global.Get("TouchEvent"):
+	case js.Global().Get("TouchEvent"):
 		return &TouchEvent{BasicEvent: ev}
-	case js.Global.Get("TrackEvent"):
+	case js.Global().Get("TrackEvent"):
 		return &TrackEvent{ev}
-	case js.Global.Get("TransitionEvent"):
+	case js.Global().Get("TransitionEvent"):
 		return &TransitionEvent{ev}
-	case js.Global.Get("UIEvent"):
+	case js.Global().Get("UIEvent"):
 		return &UIEvent{ev}
-	case js.Global.Get("UserProximityEvent"):
+	case js.Global().Get("UserProximityEvent"):
 		return &UserProximityEvent{ev}
-	case js.Global.Get("WheelEvent"):
+	case js.Global().Get("WheelEvent"):
 		return &WheelEvent{BasicEvent: ev}
 	default:
 		return ev
@@ -146,7 +146,7 @@ type EventOptions struct {
 type M map[string]interface{}
 
 func CreateEvent(typ string, opts EventOptions) *BasicEvent {
-	var event = js.Global.Get("Event").New(typ, M{
+	var event = js.Global().Get("Event").New(typ, M{
 		"bubbles":    opts.Bubbles,
 		"cancelable": opts.Cancelable,
 	})
